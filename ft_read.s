@@ -1,6 +1,8 @@
 section .text
-	global _ft_read
-	extern ___error
+
+extern ___error
+
+global _ft_read ; rdi = int fd, rsi = const void *buf, rdx = size_t count
 
 _ft_read:
 	mov rax, 0x2000003

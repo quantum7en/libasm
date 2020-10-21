@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 # include "libasm.h"
+# include <errno.h>
 
+int fd, ret;
 void check_strlen()
 {
 	char *empty = "";
@@ -37,7 +39,7 @@ void check_strlen()
 	printf("%-20s: %zu\n", "libasm", ft_strlen(alphabet));
 	printf("\n");
 	
-	// ------- NULL = SEGFAULT
+	//------- NULL = SEGFAULT
 	// printf("%-20s: \"%s\"\n", "char *", alphabet);
 	// printf("%-20s: 0\n", "expected lenght");
 	// printf("%-20s: %zu\n", "libc", strlen(NULL));	
@@ -85,7 +87,7 @@ void check_strcpy()
 	clear_buffer(buffer, 30);
 	printf("\n");
 
-	// ------- NULL = SEGFAULT
+	//------- NULL = SEGFAULT
 	// printf("%-20s: \"%s\"\n", "char []", alphabet);
 	// printf("%-20s: buffer[50]\n", "copy to");
 	// printf("%-20s: \"%s\"\n", "libc", strcpy(NULL, NULL));	
@@ -121,40 +123,58 @@ void check_strcmp()
 	printf("%-20s: \"%d\"\n", "libasm", ft_strcmp(hello_world2, empty));
 	printf("\n");
 
-	// ------- NULL = SEGFAULT
+	// //------- NULL = SEGFAULT
 	// printf("%-20s: \"%s\"\n", "char *", hello_world2);
 	// printf("%-20s: %s\n", "compared to", "NULL");
-	// printf("%-20s: \"%d\"\n", "libc", strcmp(NULL, hello_world2));
+	// //printf("%-20s: \"%d\"\n", "libc", strcmp(NULL, hello_world2));
 	// printf("%-20s: \"%d\"\n", "libasm", ft_strcmp(NULL, empty));
-	// printf("\n");
+	// // printf("\n");
 }
 
 void check_write()
 {
-	char *hello_world = "Coucou\n";
+	char *str = "Test write";
 	char *empty = "";
-	char *str=strdup("test");
+	//char *str1=strdup("test");
+	int errno_tmp;
 
 	printf("\n================================\n");
 	printf("========== FT_WRITE ============\n");
 	printf("================================\n\n");
-	printf("%-20s: \"%s\"\n", "char *", hello_world);
-	printf("%-20s: \"Libc:%zu\"\n", "libc", write(1, hello_world, 7));
+	printf("%-20s: \"%s\"\n", "char *", str);
+	printf("%-20s: \"Libc:%zu\"\n", "libc", write(1, str, 7));
 	// printf("\n");
-	printf("%-20s: \"Libasm:%zu\"\n", "libasm", ft_write(1, hello_world, 7));
+	printf("%-20s: \"Libasm:%zd\"\n", "libasm", ft_write(1, str, 7));
 	printf("\n");
 	printf("%-20s: \"%s\"\n", "char *", empty);
 	printf("%-20s: \"Libc:%zu\"\n", "libc", write(1, empty, 0));
 	// printf("\n");
-	printf("%-20s: \"Libasm:%zu\"\n", "libasm", ft_write(1, empty, 0));
+	printf("%-20s: \"Libasm:%zd\"\n", "libasm", ft_write(1, empty, 0));
 	printf("\n");
-	printf("%-20s: \"%s\"\n", "char *", hello_world);
-	printf("%-20s: \"Libc:%d\"\n", "libc", write(-7, NULL, 7));
+	printf("%-20s: \"%s\"\n", "char *", str);
+	printf("%-20s: \"Libc:%zd\"\n", "libc", write(-7, NULL, 7));
 	// printf("\n");
-	printf("%-20s: \"Libasm:%d\"\n", "libasm", ft_write(-7, NULL, 7));
-	// printf("\n");
-	// printf("error: %zd, %s\n", ft_write(211, str, strlen(str), strerror(errno)));
-	// printf("error: %zd, %s\n", write(211, str, strlen(str)));
+	printf("%-20s: \"Libasm:%zd\"\n", "libasm", ft_write(-7, NULL, 7));
+
+	fd = open("write.txt", O_CREAT | O_APPEND | O_WRONLY, 0755);
+	ft_write(fd, str, strlen(str));
+	write(fd, str, strlen(str));
+	close(fd);
+
+	errno = 0;
+	ret = ft_write(-1, str, strlen(str));
+	printf("errno = %d\n", (errno_tmp = errno));
+
+	errno = 0;
+	ret = write(-1, str, strlen(str));
+	printf("errno = %d\n", errno);
+	if (errno_tmp != errno)
+	printf("not equal");
+
+
+	printf("\n");
+	printf("error: %zd, %s\n", ft_write(211, str, strlen(str)), strerror(errno));
+	printf("error: %zd, %s\n", write(211, str, strlen(str)), strerror(errno));
 	
 }
 
@@ -249,8 +269,8 @@ void check_strdup()
 	save2 = NULL;
 	printf("\n");
 
-	// ------- NULL = SEGFAULT
-	// printf("%-20s: NULL\n", "char *");
+	//------- NULL = SEGFAULT
+	//printf("%-20s: NULL\n", "char *");
 	// save = strdup(NULL);
 	// printf("%-20s: \"%s\"\n", "libc", save);
 	// free(save);

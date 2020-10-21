@@ -1,5 +1,6 @@
 section .text
-    global _ft_strlen
+
+global _ft_strlen ; size_t ft_strlen(const char *s)
 
 _ft_strlen:
 	mov	rax, 0	; put 0 to rax
@@ -7,9 +8,9 @@ _ft_strlen:
 
 count:
 	cmp BYTE [rdi + rax], 0 ;compare byte at position rdi + rax
-	je	done
+	je	exit
 	inc rax
 	jmp count
 
-done:
+exit:
 	ret

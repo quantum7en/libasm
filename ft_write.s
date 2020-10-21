@@ -1,19 +1,20 @@
 section .text
-	global _ft_write
-	extern ___error
+
+extern ___error
+
+global _ft_write ; rdi = int fd, rsi =const void *buf, rdx = size_t count
+
 
 _ft_write:
-	test	edi, edi
-	js		_err
 	mov rax, 0x2000004
-	syscall
+	syscall ; syscall's return in rax
 	jc _err
 	ret
 
 _err:
-	push rax
+	push rax ; put rax on stack
 	call ___error
-	pop rdx
+	pop rdx ; get prev rax in rdx
 	mov [rax], rdx
 	mov rax, -1
 	ret

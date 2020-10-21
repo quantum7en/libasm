@@ -21,10 +21,6 @@ SRCS	= ft_strlen.s \
 
 OBJS	= $(SRCS:.s=.o)
 
-TEST	= test
-
-TXT		= example.txt
-
 %.o		: %.s
 	nasm -f macho64 $<
 
@@ -41,5 +37,10 @@ fclean	: clean
 
 re		: fclean all
 
-test	: re
-	gcc main.c -o test -L. -lasm
+test1   : 
+	gcc -Wall -Wextra -Werror main.c -L. libasm.a
+
+test2	:
+	gcc -Wall -Wextra -Werror main_additional.c -L. libasm.a
+
+.PHONY: all clean fclean re test1 test2

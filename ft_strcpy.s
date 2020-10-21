@@ -1,11 +1,10 @@
 section .text
-	global _ft_strcpy
+
+global _ft_strcpy ; char *ft_strcpy(char *dest, const char *src)
 
 _ft_strcpy:
 	mov	rcx, 0
 	mov rbx, 0
-	cmp rsi, 0
-	je	exit
 
 copy:
 	mov bl, byte [rsi + rcx]

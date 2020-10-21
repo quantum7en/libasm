@@ -1,5 +1,6 @@
 section .text
-    global _ft_strcmp
+
+global _ft_strcmp ; int	ft_strcmp(const char *s1, const char *s2);
 
 _ft_strcmp:
 	mov rax, 0
@@ -12,14 +13,14 @@ compare:
 	mov bl, byte [rsi + rcx]
 	cmp al, bl
 	jne different
-	je	same
+	je	equal
 
 different:
 	sub rax, rbx
 	ret
 
-same:
-	cmp al, 0
+equal:
+	cmp al, 0 ; if '\0'
 	je 	exit
 	inc rcx
 	jmp compare
